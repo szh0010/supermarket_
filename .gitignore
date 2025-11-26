@@ -1,0 +1,17 @@
+# Random VS intermediate dirs
+supermar.*/
+supermarket.*/
+*.tmp
+*.temp
+
+# Visual Studio system dirs
+.vs/
+x64/
+Debug/
+Release/
+
+# VS project files (do not commit)
+*.sln
+*.slnx
+*.vcxproj
+*.vcxproj.*
