@@ -14,15 +14,33 @@ using namespace std;
 class Connector
 {
 public:
-    Connector();
+    // [yyx] 重构
+    Connector();  // 自动读取 config.ini 并连接数据库
+    ~Connector();  // 析构释放资源
+
+    sql::ResultSet* Query(const std::string& sql); // 执行 SELECT 从数据库中查询数据
+    int Execute(const std::string& sql);// 执行 INSERT/UPDATE/DELETE 
+
+    std::unique_ptr<sql::PreparedStatement> Prepare(const std::string& sql);
+    bool IsConnected() const { return conn != nullptr; }
+    std::shared_ptr<sql::Connection> GetConnection();
+
     sql::ResultSet* GetResultPointer(const sql::SQLString& sql);
-    void TestShow(sql::ResultSet* res);
 private:
-    sql::mysql::MySQL_Driver* driver;
-    std::unique_ptr<sql::Connection> conn;
-    std::string m_host;//数据库地址
-    std::string m_user;//数据库用户名
-    std::string m_password;//数据库密码
+    // [yyx]
+    void LoadConfig();               // 从 config.ini 读取配置
+    bool Connect();                  // 连接数据库
+
+
+private:
+    // [yyx]
+    std::string host;
+    std::string user;
+    std::string password;
+    std::string database; 
+
+    sql::mysql::MySQL_Driver* driver; 
+    std::shared_ptr<sql::Connection> conn; // 这里用shared指针
 
 };
 

@@ -1,3 +1,0 @@
-host:tcp://127.0.0.1:3306
-user:root
-passport:123456

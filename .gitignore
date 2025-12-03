@@ -16,3 +16,4 @@ Release/
 *.slnx
 *.vcxproj
 *.vcxproj.*
+config.ini

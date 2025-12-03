@@ -1,67 +1,41 @@
+#include "../include/Config.h" // [yyx] 读取文件夹下的config.ini 配置文件
 #include "../include/Connector.h"
 #include "../include/Menu.h"
+#include "../include/User.h"
+#include "../include/UserDAO.h"
+#include "../include/UserService.h"
 using namespace std;
 
 
 int main() {
-    // 设置 Windows 控制台为 UTF-8
-    //SetConsoleOutputCP(0);
-    //SetConsoleCP(0);
-    Connector connector; //创建一个连接类
+    
+    Config::Instance().Load("../config.ini");
+    // 初始化数据库连接
+    Connector db;
+    UserDAO userDao(db); // 将用户的数据库层打开
+    UserService userService(userDao); // 将用户的业务层打开
+    if (!db.IsConnected()) {
+        return -1;
+    }
     Menu menu;
     menu.ShowLoginMenu();
-    // 我们需要取得用户名和密码，用于判断这个用户是否是管理员
-    //menu.GetUsername();
-    //menu.GetPassword();
-    // 拿着用户名和密码去数据库比对出一个结果 难点
-    
-    // 假设我们这里判断比对出来了，这个用户是0
-    int tempUserType = 0;
-    // 然后把这个结果赋值给menu.
+    string username = menu.GetUsername();
+    string password = menu.GetPassword();
+    User loginUser; // 用户登录
 
-    menu.SetUserType(tempUserType);
+    // 下面这块逻辑还需要处理
+    if (userService.Login(username, password, loginUser)) {
+        cout << "登录成功!" << endl;
+        cout << "欢迎: " << loginUser.username << endl;
 
-    if (menu.GetUserType() == 0) // 管理员
-    {
-        // 进入管理员界面
-        menu.ShowAdminMenu();
-        int n;
-        if (n == 1)
-        {
-            menu.ShowOpenMenu();
-        }
-        if (n == 2)
-        {
-            menu.ShowGiveMenu();
-        }
-        if (n == 3)
-        {
-            menu.ShowPassMenu();
-        }
+        if (loginUser.user_type == 1)
+            menu.ShowAdminMenu();
+        else
+            menu.ShowGuestMenu();
     }
-    else // 顾客
-    {
-        // 进入顾客的界面
-        menu.ShowGuestMenu();
-        int n;
-        if (n == 1)
-        {
-            menu.ShowShopMenu();
-        }
-        if (n == 2)
-        {
-            menu.ShowBackMenu();
-        }
-        if (n == 3)
-        {
-            menu.ShowMyselfMenu();
-        }
+    else {
+        cout << "账号或密码错误！" << endl;
     }
-    // 判断是那种类型的用户，然后给出不同的界面
-    //string sql_t = "SELECT username FROM testinfo";
-    //sql::ResultSet* res_t = connector.GetResultPointer(sql_t);
-    //connector.TestShow(res_t);
-
     
     return 0;
 }
