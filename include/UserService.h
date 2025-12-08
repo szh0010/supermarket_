@@ -7,7 +7,10 @@ public:
     UserService(UserDAO& dao);
 
     bool Login(const std::string& username, const std::string& password, User& userOut); // 登录用户逻辑
-    bool Register(const User& user); // 注册用户逻辑
+
+    //bool Register(const User& user); // 注册用户逻辑
+    bool Register(User& user);
+
 
 private:
     UserDAO& dao;

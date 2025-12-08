@@ -19,6 +19,8 @@ public:
 	void ShowShopMenu();
 	void ShowBackMenu();
 	void ShowMyselfMenu();
+	void ShowEnterMenu();
+	void ShowRegisterMenu();
 // к╫сп╣д
 private:
 	std::string username;

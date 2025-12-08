@@ -1,4 +1,25 @@
 #include "../include/Menu.h"
+void Menu::ShowEnterMenu()
+{
+	std::cout << "----- 欢迎使用晶东超市系统 ------" << std::endl;
+	std::cout << "1.老用户登录" << std::endl << "2.新用户注册" << std::endl;
+	int num;
+	std::cin >> num;
+	if (num == 1)
+	{
+		system("cls");
+		ShowLoginMenu();
+	}
+	else if (num == 2)
+	{
+		system("cls");
+		ShowRegisterMenu();
+	}
+	else
+	{
+		std::cout << "输入有误" << std::endl;
+	}
+}
 
 void Menu::ShowLoginMenu()
 {
@@ -8,7 +29,16 @@ void Menu::ShowLoginMenu()
 	std::cout << "----- 欢迎使用晶东超市系统 ------" << std::endl;
 	std::cout << "请输入用户名:" << std::endl;
 	std::cin >> this->username;
-	std::cout << "请输入密码" << std::endl;
+	std::cout << "请输入密码:" << std::endl;
+	std::cin >> this->password;
+}
+
+void Menu::ShowRegisterMenu()
+{
+	std::cout << "----- 欢迎使用注册系统 ------" << std::endl;
+	std::cout << "请输入用户名:" << std::endl;
+	std::cin >> this->username;
+	std::cout << "请输入密码:" << std::endl;
 	std::cin >> this->password;
 }
 

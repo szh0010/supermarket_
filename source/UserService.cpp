@@ -7,13 +7,17 @@ bool UserService::Login(const std::string& username, const std::string& password
     return dao.ValidateLogin(username, password, userOut);
 }
 
-bool UserService::Register(const User& user) {
-    // 可在这里做检查，例如用户名是否重复
-    User tmp;
-    if (dao.GetUserByName(user.username, tmp)) {
-        std::cout << "用户名已存在！" << std::endl;
-        return false;
-    }
-
+bool UserService::Register(User& user) {
     return dao.AddUser(user);
 }
+
+//bool UserService::Register(const User& user) {
+//    // 可在这里做检查，例如用户名是否重复
+//    User tmp;
+//    if (dao.GetUserByName(user.username, tmp)) {
+//        std::cout << "用户名已存在！" << std::endl;
+//        return false;
+//    }
+//
+//    return dao.AddUser(user);
+//}

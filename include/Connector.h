@@ -37,10 +37,11 @@ private:
     std::string host;
     std::string user;
     std::string password;
+
     std::string database; 
 
     sql::mysql::MySQL_Driver* driver; 
+
     std::shared_ptr<sql::Connection> conn; // 这里用shared指针
 
 };
-

@@ -2,7 +2,7 @@
 #include "../include/Config.h"
 // [yyx] - 12.3重构
 //初始化构造函数
-Connector::Connector() 
+Connector::Connector()
 {
 	LoadConfig();
 	Connect();

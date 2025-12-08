@@ -13,7 +13,8 @@ public:
 
     bool GetUserByName(const std::string& username, User& outUser);
     bool ValidateLogin(const std::string& username, const std::string& password, User& outUser); // 验证用户是否登录成功
-    bool AddUser(const User& user); // 后续注册用
+
+    bool AddUser(User& user);
 
 private:
     Connector& connector;
