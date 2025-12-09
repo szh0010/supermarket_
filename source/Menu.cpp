@@ -9,6 +9,7 @@ void Menu::ShowEnterMenu()
 	{
 		system("cls");
 		ShowLoginMenu();
+		std::cout << "1.È·ÈÏµÇÂ¼" << std::endl << "2.È·ÈÏ×¢²á" << std::endl;
 	}
 	else if (num == 2)
 	{
@@ -31,6 +32,7 @@ void Menu::ShowLoginMenu()
 	std::cin >> this->username;
 	std::cout << "ÇëÊäÈëÃÜÂë:" << std::endl;
 	std::cin >> this->password;
+	system("cls");
 }
 
 void Menu::ShowRegisterMenu()

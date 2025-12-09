@@ -58,15 +58,9 @@ bool UserDAO::ValidateLogin(const std::string& username, const std::string& pass
         // 2. 如果登录失败了，说明是什么情况？
         // 3. 登录失败还会把outUser给赋值吗？
         // 作答区：
-<<<<<<< HEAD
-        // 1. 
-        // 2.
-        // 3.
-=======
         // 1. 通过用户输入的账号密码与数据库进行比对，数据一致则登录成功
         // 2. 登录失败说明账号或者密码有误
         // 3. 不会
->>>>>>> a7b4713 (鍒濇瀹屾垚瓒呭競娉ㄥ唽绯荤粺鐨勬鏋?
         outUser.id = res->getInt("id");
         outUser.username = res->getString("username");
         outUser.password = res->getString("password");

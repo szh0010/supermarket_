@@ -8,7 +8,7 @@ using namespace std;
 
 void HandleLogin(Menu& menu, UserService& userService, User& loginUser)
 {
-    menu.ShowLoginMenu();
+    //menu.ShowLoginMenu();
     string username = menu.GetUsername();
     string password = menu.GetPassword();
     if (userService.Login(username, password, loginUser))
@@ -42,7 +42,7 @@ void HandleRegister(Menu& menu, UserService& userService, User& registerUser)
         cout << "×¢²á³É¹¦£¡" << endl;
     }
     else
-    {
+   {
         cout << "×¢²áÊ§°Ü£¬ÇëÖØÊÔ£¡" << endl;
     }
 }
@@ -66,8 +66,13 @@ int main() {
     string password = menu.GetPassword();
     User loginUser; // ÓÃ»§µÇÂ¼
     User registerUser; //ÓÃ»§×¢²á
-
-    if (userService.Login(username, password, loginUser)) {
+    int choice;
+    cin >> choice;
+    if (choice == 1)
+    {
+        HandleLogin(menu, userService, loginUser);
+    }
+    /*if (userService.Login(username, password, loginUser)) {
         cout << "µÇÂ¼³É¹¦!" << endl;
         cout << "»¶Ó­: " << loginUser.username << endl;
 
@@ -75,26 +80,34 @@ int main() {
 
         {
             menu.ShowAdminMenu();
-        } 
+        }
         else
         {
-            
+
         }
 
     }
     else {
         cout << "ÕËºÅ»òÃÜÂë´íÎó£¡" << endl;
-    }
+    }*/
 
 
     //ÓÃ»§×¢²á
-    if (userService.Register(registerUser))
+    else if (choice == 2)
+    {
+        HandleRegister(menu, userService, registerUser);
+    }
+    else
+    {
+        cout << "ÊäÈëÓÐÎó" << endl;
+    }
+    /*if (userService.Register(registerUser))
     {
         cout << "×¢²á³É¹¦!" << endl;
         cout << "»¶Ó­: " << loginUser.username << endl;
-    }
 
-   
+    }*/
+    
 
     return 0;
 }
