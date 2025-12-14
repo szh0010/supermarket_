@@ -3,23 +3,6 @@ void Menu::ShowEnterMenu()
 {
 	std::cout << "----- 欢迎使用晶东超市系统 ------" << std::endl;
 	std::cout << "1.老用户登录" << std::endl << "2.新用户注册" << std::endl;
-	int num;
-	std::cin >> num;
-	if (num == 1)
-	{
-		system("cls");
-		ShowLoginMenu();
-		std::cout << "1.确认登录" << std::endl << "2.确认注册" << std::endl;
-	}
-	else if (num == 2)
-	{
-		system("cls");
-		ShowRegisterMenu();
-	}
-	else
-	{
-		std::cout << "输入有误" << std::endl;
-	}
 }
 
 void Menu::ShowLoginMenu()
@@ -42,6 +25,29 @@ void Menu::ShowRegisterMenu()
 	std::cin >> this->username;
 	std::cout << "请输入密码:" << std::endl;
 	std::cin >> this->password;
+	std::cout << "请选择你的性别:" << std::endl;
+	std::cout << "1. 男性" << std::endl;
+	std::cout << "2. 女性" << std::endl;
+	int choice = 0;
+	std::cin >> choice;
+	if (choice == 1)
+	{
+		SetGender("male");
+	}
+	else if (choice == 2)
+	{
+		SetGender("female");
+	}
+	else
+	{
+		SetGender("other");
+	}
+	system("cls");
+}
+
+void Menu::SetGender(const std::string gender)
+{
+	this->gender = gender;
 }
 
 int Menu::GetUserType()
@@ -57,6 +63,11 @@ std::string Menu::GetUsername()
 std::string Menu::GetPassword()
 {
 	return this->password;
+}
+
+std::string Menu::GetGender()
+{
+	return this->gender;
 }
 
 void Menu::SetUserType(int userType)
@@ -90,10 +101,17 @@ void Menu::ShowGuestMenu()
 	std::cout << "----- 1.选购商品 ------------" << std::endl;
 	std::cout << "----- 2.退换商品 ------------" << std::endl;
 	std::cout << "----- 3.我的账户 ------------" << std::endl;
+	int num;
+	std::cin >> num;
+	if (num == 1)
+	{
+		ShowShopMenu();
+	}
 }
 void Menu::ShowShopMenu()
 {
-
+	system("cls");
+	std::cout << "----- 商品列表 -----" << std::endl;
 }
 void Menu::ShowBackMenu()
 {

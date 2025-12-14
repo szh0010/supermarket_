@@ -12,7 +12,7 @@ public:
     int user_type = 0;  // 0=顾客, 1=管理员
     int score = 0;
     int is_vip = 0;     // 0=非VIP, 1=VIP
-    std::string gender;
+    std::string gender; // "" 默认是空，所以这里注册要用户来选择
     int age = 0;
     std::string created_at;
 

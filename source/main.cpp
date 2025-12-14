@@ -8,7 +8,7 @@ using namespace std;
 
 void HandleLogin(Menu& menu, UserService& userService, User& loginUser)
 {
-    //menu.ShowLoginMenu();
+    menu.ShowLoginMenu();
     string username = menu.GetUsername();
     string password = menu.GetPassword();
     if (userService.Login(username, password, loginUser))
@@ -35,8 +35,10 @@ void HandleRegister(Menu& menu, UserService& userService, User& registerUser)
     menu.ShowRegisterMenu();
     string username = menu.GetUsername();
     string password = menu.GetPassword();
+    string gender = menu.GetGender();
     registerUser.username = username;
     registerUser.password = password;
+    registerUser.gender = gender;
     if (userService.Register(registerUser))
     {
         cout << "注册成功！" << endl;
@@ -72,6 +74,7 @@ int main() {
     {
         HandleLogin(menu, userService, loginUser);
     }
+<<<<<<< HEAD
     /*if (userService.Login(username, password, loginUser)) {
         cout << "登录成功!" << endl;
         cout << "欢迎: " << loginUser.username << endl;
@@ -93,6 +96,8 @@ int main() {
 
 
     //用户注册
+=======
+>>>>>>> 6e57a57 (瀹屾垚鐢ㄦ埛娉ㄥ唽鍔熻兘)
     else if (choice == 2)
     {
         HandleRegister(menu, userService, registerUser);
