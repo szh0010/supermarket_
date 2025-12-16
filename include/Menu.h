@@ -1,4 +1,5 @@
 #pragma once
+#include "Connector.h"
 #include <iostream>
 #include <string>
 
@@ -20,7 +21,7 @@ public:
 	void ShowOpenMenu();
 	void ShowGiveMenu();
 	void ShowPassMenu();
-	void ShowShopMenu();
+	void ShowShopMenu(const std::vector<Product>& products);
 	void ShowBackMenu();
 	void ShowMyselfMenu();
 	void ShowEnterMenu();
@@ -33,5 +34,6 @@ private:
 	std::string username;
 	std::string password;
 	std::string gender;
+	Connector connector;
 	int userType; // 0是管理，1是顾客 
 };

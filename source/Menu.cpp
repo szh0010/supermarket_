@@ -1,4 +1,7 @@
 #include "../include/Menu.h"
+#include "../include/Product.h"
+#include "../include/Connector.h"
+#include<vector>
 void Menu::ShowEnterMenu()
 {
 	std::cout << "----- 欢迎使用晶东超市系统 ------" << std::endl;
@@ -105,13 +108,29 @@ void Menu::ShowGuestMenu()
 	std::cin >> num;
 	if (num == 1)
 	{
-		ShowShopMenu();
+		std::vector<Product> products = connector.GetProducts();
+		ShowShopMenu(products);
 	}
 }
-void Menu::ShowShopMenu()
+void Menu::ShowShopMenu(const std::vector<Product>& products)
 {
 	system("cls");
 	std::cout << "----- 商品列表 -----" << std::endl;
+	if (products.empty()) 
+	{
+		std::cout << "没有可用商品。" << std::endl;
+		return;
+	}
+
+	// 显示商品列表
+	for (const auto& product : products) 
+	{
+		product.Print();  // 使用 Product 类中的 Print 方法显示商品信息
+	}
+
+	std::cout << "请选择商品编号购买：" << std::endl;
+	int productId;
+	std::cin >> productId;
 }
 void Menu::ShowBackMenu()
 {

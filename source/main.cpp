@@ -42,6 +42,7 @@ void HandleRegister(Menu& menu, UserService& userService, User& registerUser)
     if (userService.Register(registerUser))
     {
         cout << "注册成功！" << endl;
+        HandleLogin(menu, userService, registerUser);
     }
     else
    {
@@ -74,30 +75,6 @@ int main() {
     {
         HandleLogin(menu, userService, loginUser);
     }
-<<<<<<< HEAD
-    /*if (userService.Login(username, password, loginUser)) {
-        cout << "登录成功!" << endl;
-        cout << "欢迎: " << loginUser.username << endl;
-
-        if (loginUser.user_type == 1)
-
-        {
-            menu.ShowAdminMenu();
-        }
-        else
-        {
-
-        }
-
-    }
-    else {
-        cout << "账号或密码错误！" << endl;
-    }*/
-
-
-    //用户注册
-=======
->>>>>>> 6e57a57 (瀹屾垚鐢ㄦ埛娉ㄥ唽鍔熻兘)
     else if (choice == 2)
     {
         HandleRegister(menu, userService, registerUser);
@@ -112,7 +89,8 @@ int main() {
         cout << "欢迎: " << loginUser.username << endl;
 
     }*/
-    
+    std::vector<Product> products = db.GetProducts();  // 从数据库获取商品数据
+    menu.ShowShopMenu(products); // 将商品数据传递给 ShowShopMenu
 
     return 0;
 }

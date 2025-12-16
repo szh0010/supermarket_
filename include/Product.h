@@ -16,12 +16,11 @@ public:
 		: id(id), name(name), price(price), stock(stock)
 	{
 	}
-
+	
 	// 打印商品信息
 	void Print() const
 	{
-		std::cout << "ID: " << id << ", Name: " << name
-			<< ", Price: " << price << ", Stock: " << stock << std::endl;
+		std::cout << "ID: " << id << ", Name: " << name<< ", Price: " << price << ", Stock: " << stock << std::endl;
 	}
 };
 
