@@ -4,9 +4,12 @@
 #include "../include/User.h"
 #include "../include/UserDAO.h"
 #include "../include/UserService.h"
+#include "../include/ProductDAO.h"
+#include "../include/ProductService.h"
+
 using namespace std;
 
-void HandleLogin(Menu& menu, UserService& userService, User& loginUser)
+void HandleLogin(Menu& menu, UserService& userService, User& loginUser,ProductService& productService)
 {
     menu.ShowLoginMenu();
     string username = menu.GetUsername();
@@ -21,7 +24,7 @@ void HandleLogin(Menu& menu, UserService& userService, User& loginUser)
         }
         else
         {
-            menu.ShowGuestMenu();
+            menu.ShowGuestMenu(productService);
         }
     }
     else
@@ -30,7 +33,7 @@ void HandleLogin(Menu& menu, UserService& userService, User& loginUser)
     }
 }
 
-void HandleRegister(Menu& menu, UserService& userService, User& registerUser)
+void HandleRegister(Menu& menu, UserService& userService, User& registerUser, ProductService& productService)
 {
     menu.ShowRegisterMenu();
     string username = menu.GetUsername();
@@ -42,7 +45,7 @@ void HandleRegister(Menu& menu, UserService& userService, User& registerUser)
     if (userService.Register(registerUser))
     {
         cout << "注册成功！" << endl;
-        HandleLogin(menu, userService, registerUser);
+        HandleLogin(menu, userService, registerUser,productService);
     }
     else
    {
@@ -59,6 +62,9 @@ int main() {
     Connector db;
     UserDAO userDao(db); // 将用户的数据库层打开
     UserService userService(userDao); // 将用户的业务层打开
+    ProductDAO productDao(db);
+    ProductService productService(productDao);
+    
     if (!db.IsConnected()) {
         return -1;
     }
@@ -73,24 +79,17 @@ int main() {
     cin >> choice;
     if (choice == 1)
     {
-        HandleLogin(menu, userService, loginUser);
+        HandleLogin(menu, userService, loginUser, productService);
     }
     else if (choice == 2)
     {
-        HandleRegister(menu, userService, registerUser);
+        HandleRegister(menu, userService, registerUser, productService);
     }
     else
     {
         cout << "输入有误" << endl;
     }
-    /*if (userService.Register(registerUser))
-    {
-        cout << "注册成功!" << endl;
-        cout << "欢迎: " << loginUser.username << endl;
 
-    }*/
-    std::vector<Product> products = db.GetProducts();  // 从数据库获取商品数据
-    menu.ShowShopMenu(products); // 将商品数据传递给 ShowShopMenu
 
     return 0;
 }

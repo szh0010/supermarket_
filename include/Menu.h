@@ -1,5 +1,6 @@
 #pragma once
 #include "Connector.h"
+#include "ProductService.h"
 #include <iostream>
 #include <string>
 
@@ -10,7 +11,7 @@ public:
 	//Menu() : username(""), password(""), userType(0) {}  // 初始化成员变量
 	void ShowLoginMenu();
 	void ShowAdminMenu(); // 自己去完善
-	void ShowGuestMenu(); // 自己去完善
+	void ShowGuestMenu(ProductService productService); // 自己去完善
 	int GetUserType(); // 返回用户类型
 	std::string GetUsername();
 	std::string GetPassword();

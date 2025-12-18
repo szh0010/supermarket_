@@ -6,6 +6,7 @@
 
 // [yyx]
 // 数据库层，这个用于和数据库交互
+// DAO D database A acesss O Object
 // 对数据库的数据进行增删改查
 class UserDAO {
 public:

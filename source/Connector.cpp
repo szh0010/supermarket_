@@ -107,29 +107,4 @@ sql::ResultSet* Connector::GetResultPointer(const sql::SQLString& query)
 }
 
 
-std::vector<Product> Connector::GetProducts()
-{
-	std::vector<Product> products;
 
-	try {
-		std::string query = "SELECT id, name, price, stock FROM products";
-		sql::ResultSet* res = GetResultPointer(query);
-
-		if (res) {
-			while (res->next()) {
-				products.emplace_back(
-					res->getInt("id"),
-					res->getString("name"),
-					res->getDouble("price"),
-					res->getInt("stock")
-				);
-			}
-			delete res;
-		}
-	}
-	catch (sql::SQLException& e) {
-		std::cerr << "[DB Error] ²éÑ¯ÉÌÆ·Ê§°Ü: " << e.what() << std::endl;
-	}
-
-	return products;
-}

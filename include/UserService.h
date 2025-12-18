@@ -2,6 +2,7 @@
 #include "UserDAO.h"
 
 // 业务逻辑层
+// Service = 服务
 class UserService {
 public:
     UserService(UserDAO& dao);

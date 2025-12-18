@@ -3,11 +3,13 @@
 UserService::UserService(UserDAO& dao)
     : dao(dao) {}
 
-bool UserService::Login(const std::string& username, const std::string& password, User& userOut) {
+bool UserService::Login(const std::string& username, const std::string& password, User& userOut) 
+{
     return dao.ValidateLogin(username, password, userOut);
 }
 
-bool UserService::Register(User& user) {
+bool UserService::Register(User& user) 
+{
     return dao.AddUser(user);
 }
 

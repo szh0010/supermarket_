@@ -98,7 +98,7 @@ void Menu::ShowPassMenu()
 {
 	std::cout << "目前临期货物陈列：" << std::endl;
 }
-void Menu::ShowGuestMenu()
+void Menu::ShowGuestMenu(ProductService productService)
 {
 	std::cout << "----- 欢迎光临晶东超市 ------" << std::endl;
 	std::cout << "----- 1.选购商品 ------------" << std::endl;
@@ -108,8 +108,13 @@ void Menu::ShowGuestMenu()
 	std::cin >> num;
 	if (num == 1)
 	{
-		std::vector<Product> products = connector.GetProducts();
+		std::vector<Product> products; // 这时候肯定是空列表
+		productService.GetAllProducts(products);
 		ShowShopMenu(products);
+	}
+	else if (num == 2)
+	{
+		ShowBackMenu();
 	}
 }
 void Menu::ShowShopMenu(const std::vector<Product>& products)
@@ -134,7 +139,7 @@ void Menu::ShowShopMenu(const std::vector<Product>& products)
 }
 void Menu::ShowBackMenu()
 {
-
+	std::cout << "请选择要退还的商品：" << std::endl;
 }
 void Menu::ShowMyselfMenu()
 {
