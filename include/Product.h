@@ -1,4 +1,4 @@
-// Product.h
+ï»¿// Product.h
 #include<iostream>
 #ifndef PRODUCT_H
 #define PRODUCT_H
@@ -8,22 +8,22 @@ class Product {
 public:
 
 
-	// ¹¹Ôìº¯Êı
+	// æ„é€ å‡½æ•°
 	Product(int id, const std::string& name, double price, int stock)
 		: id(id), name(name), price(price), stock(stock)
 	{
 	}
 	
-	// ´òÓ¡ÉÌÆ·ĞÅÏ¢£¬ÒµÎñÂß¼­
+	// æ‰“å°å•†å“ä¿¡æ¯ï¼Œä¸šåŠ¡é€»è¾‘
 	void Print() const
 	{
 		std::cout << "ID: " << id << ", Name: " << name<< ", Price: " << price << ", Stock: " << stock << std::endl;
 	}
 private:
-	int id;             // ÉÌÆ·ID
-	std::string name;   // ÉÌÆ·Ãû³Æ
-	double price;       // ÉÌÆ·¼Û¸ñ
-	int stock;          // ¿â´æ
+	int id;             // å•†å“ID
+	std::string name;   // å•†å“åç§°
+	double price;       // å•†å“ä»·æ ¼
+	int stock;          // åº“å­˜
 };
 
 #endif // PRODUCT_H

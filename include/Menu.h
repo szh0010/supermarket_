@@ -1,4 +1,4 @@
-#pragma once
+ï»¿#pragma once
 #include "Connector.h"
 #include "ProductService.h"
 #include <iostream>
@@ -6,13 +6,13 @@
 
 class Menu
 {
-// ¹«ÓĞµÄ
+// å…¬æœ‰çš„
 public:
-	//Menu() : username(""), password(""), userType(0) {}  // ³õÊ¼»¯³ÉÔ±±äÁ¿
+	//Menu() : username(""), password(""), userType(0) {}  // åˆå§‹åŒ–æˆå‘˜å˜é‡
 	void ShowLoginMenu();
-	void ShowAdminMenu(); // ×Ô¼ºÈ¥ÍêÉÆ
-	void ShowGuestMenu(ProductService productService); // ×Ô¼ºÈ¥ÍêÉÆ
-	int GetUserType(); // ·µ»ØÓÃ»§ÀàĞÍ
+	void ShowAdminMenu(); // è‡ªå·±å»å®Œå–„
+	void ShowGuestMenu(ProductService productService); // è‡ªå·±å»å®Œå–„
+	int GetUserType(); // è¿”å›ç”¨æˆ·ç±»å‹
 	std::string GetUsername();
 	std::string GetPassword();
 	std::string GetGender();
@@ -30,11 +30,11 @@ public:
 
 	void SetGender(const std::string gender);
 
-// Ë½ÓĞµÄ
+// ç§æœ‰çš„
 private:
 	std::string username;
 	std::string password;
 	std::string gender;
 	Connector connector;
-	int userType; // 0ÊÇ¹ÜÀí£¬1ÊÇ¹Ë¿Í 
+	int userType; // 0æ˜¯ç®¡ç†ï¼Œ1æ˜¯é¡¾å®¢ 
 };

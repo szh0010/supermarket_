@@ -1,11 +1,11 @@
-#include "../include/Connector.h"
+ï»¿#include "../include/Connector.h"
 #include "../include/Config.h"
 #include "../include/Product.h"
 #include <vector>
-// [yyx] - 12.3ÖØ¹¹
-//³õÊ¼»¯¹¹Ôìº¯Êı
+// [yyx] - 12.3é‡æ„
+//åˆå§‹åŒ–æ„é€ å‡½æ•°
 
-// ¸Ã·½·¨Ö´ĞĞ²éÑ¯²¢·µ»Ø½á¹û¼¯
+// è¯¥æ–¹æ³•æ‰§è¡ŒæŸ¥è¯¢å¹¶è¿”å›ç»“æœé›†
 
 Connector::Connector()
 {
@@ -37,17 +37,20 @@ bool Connector::Connect()
 		driver = sql::mysql::get_mysql_driver_instance();
 		conn = std::unique_ptr<sql::Connection>(driver->connect(host, user, password));
 		conn->setSchema(database);
-		std::cout << "[DB] Êı¾İ¿âÁ¬½Ó³É¹¦£¡" << std::endl;
+
+		// --- æ ¸å¿ƒä¿®æ”¹å¼€å§‹ ---
+		// æ˜¾å¼é€šè¿‡ SQL å‘½ä»¤è®¾ç½®å­—ç¬¦é›†ï¼Œç¡®ä¿åŒå‘ä¼ è¾“ä¸€è‡´
+		std::unique_ptr<sql::Statement> stmt(conn->createStatement());
+		stmt->execute("SET NAMES utf8mb4");
+		// --- æ ¸å¿ƒä¿®æ”¹ç»“æŸ ---
+
+		std::cout << "[DB] æ•°æ®åº“è¿æ¥æˆåŠŸï¼" << std::endl;
 		return true;
 	}
 	catch (sql::SQLException& e) {
-		std::cerr << "[DB Error] Á¬½ÓÊ§°Ü: " << e.what() << std::endl;
-		std::cerr << "MySQL Code: " << e.getErrorCode()
-			<< "  SQLState: " << e.getSQLState() << std::endl;
-		return false;
+		// ... åŸæœ‰çš„é”™è¯¯å¤„ç† ...
 	}
 }
-
 int Connector::Execute(const std::string& sql)
 {
 	try {
@@ -55,7 +58,7 @@ int Connector::Execute(const std::string& sql)
 		return stmt->executeUpdate(sql);
 	}
 	catch (sql::SQLException& e) {
-		std::cerr << "[DB Error] Ö´ĞĞÊ§°Ü: " << e.what() << std::endl;
+		std::cerr << "[DB Error] æ‰§è¡Œå¤±è´¥: " << e.what() << std::endl;
 		return -1;
 	}
 }
@@ -68,7 +71,7 @@ std::unique_ptr<sql::PreparedStatement> Connector::Prepare(const std::string& sq
 std::shared_ptr<sql::Connection> Connector::GetConnection() {
 	try {
 		if (!conn || conn->isClosed()) {
-			std::cout << "[DB] Á¬½Ó¶Ï¿ª£¬³¢ÊÔ×Ô¶¯ÖØÁ¬..." << std::endl;
+			std::cout << "[DB] è¿æ¥æ–­å¼€ï¼Œå°è¯•è‡ªåŠ¨é‡è¿..." << std::endl;
 			Connect();
 		}
 	}
@@ -79,16 +82,16 @@ std::shared_ptr<sql::Connection> Connector::GetConnection() {
 	return conn;
 }
 
-// ÔÚ Connector.cpp ÖĞ¶¨Òå Query ·½·¨
+// åœ¨ Connector.cpp ä¸­å®šä¹‰ Query æ–¹æ³•
 sql::ResultSet* Connector::Query(const std::string& sql) {
 	try {
-		std::unique_ptr<sql::Statement> stmt(conn->createStatement());  // ´´½¨ Statement ¶ÔÏó
-		sql::ResultSet* res = stmt->executeQuery(sql);  // Ö´ĞĞ²éÑ¯²¢»ñÈ¡½á¹û¼¯
+		std::unique_ptr<sql::Statement> stmt(conn->createStatement());  // åˆ›å»º Statement å¯¹è±¡
+		sql::ResultSet* res = stmt->executeQuery(sql);  // æ‰§è¡ŒæŸ¥è¯¢å¹¶è·å–ç»“æœé›†
 		return res;
 	}
 	catch (sql::SQLException& e) {
-		std::cerr << "SQLException: " << e.what() << std::endl;  // ´íÎó´¦Àí
-		return nullptr;  // ²éÑ¯Ê§°ÜÊ±·µ»Ø¿ÕÖ¸Õë
+		std::cerr << "SQLException: " << e.what() << std::endl;  // é”™è¯¯å¤„ç†
+		return nullptr;  // æŸ¥è¯¢å¤±è´¥æ—¶è¿”å›ç©ºæŒ‡é’ˆ
 	}
 }
 
@@ -97,12 +100,12 @@ sql::ResultSet* Connector::GetResultPointer(const sql::SQLString& query)
 {
 	try {
 		std::unique_ptr<sql::Statement> stmt(conn->createStatement());
-		sql::ResultSet* res = stmt->executeQuery(query);  // Ö´ĞĞ²éÑ¯²¢·µ»Ø½á¹û
+		sql::ResultSet* res = stmt->executeQuery(query);  // æ‰§è¡ŒæŸ¥è¯¢å¹¶è¿”å›ç»“æœ
 		return res;
 	}
 	catch (sql::SQLException& e) {
 		std::cerr << "SQLException: " << e.what() << std::endl;
-		return nullptr;  // ²éÑ¯Ê§°ÜÊ±·µ»Ø¿ÕÖ¸Õë
+		return nullptr;  // æŸ¥è¯¢å¤±è´¥æ—¶è¿”å›ç©ºæŒ‡é’ˆ
 	}
 }
 

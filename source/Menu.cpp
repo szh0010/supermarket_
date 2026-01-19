@@ -1,36 +1,36 @@
-#include "../include/Menu.h"
+ï»¿#include "../include/Menu.h"
 #include "../include/Product.h"
 #include "../include/Connector.h"
 #include<vector>
 void Menu::ShowEnterMenu()
 {
-	std::cout << "----- »¶Ó­Ê¹ÓÃ¾§¶«³¬ÊÐÏµÍ³ ------" << std::endl;
-	std::cout << "1.ÀÏÓÃ»§µÇÂ¼" << std::endl << "2.ÐÂÓÃ»§×¢²á" << std::endl;
+	std::cout << "----- æ¬¢è¿Žä½¿ç”¨æ™¶ä¸œè¶…å¸‚ç³»ç»Ÿ ------" << std::endl;
+	std::cout << "1.è€ç”¨æˆ·ç™»å½•" << std::endl << "2.æ–°ç”¨æˆ·æ³¨å†Œ" << std::endl;
 }
 
 void Menu::ShowLoginMenu()
 {
-	// GBK ¹ú±ê = ¡°»¶Ó­Ê¹ÓÃ³¬ÊÐÏµÍ³¡±
+	// GBK å›½æ ‡ = â€œæ¬¢è¿Žä½¿ç”¨è¶…å¸‚ç³»ç»Ÿâ€
 	// UTF-8 
-	// Á½ÖÖ²»Í¬µÄ±àÂë±ê×¼
-	std::cout << "----- »¶Ó­Ê¹ÓÃ¾§¶«³¬ÊÐÏµÍ³ ------" << std::endl;
-	std::cout << "ÇëÊäÈëÓÃ»§Ãû:" << std::endl;
+	// ä¸¤ç§ä¸åŒçš„ç¼–ç æ ‡å‡†
+	std::cout << "----- æ¬¢è¿Žä½¿ç”¨æ™¶ä¸œè¶…å¸‚ç³»ç»Ÿ ------" << std::endl;
+	std::cout << "è¯·è¾“å…¥ç”¨æˆ·å:" << std::endl;
 	std::cin >> this->username;
-	std::cout << "ÇëÊäÈëÃÜÂë:" << std::endl;
+	std::cout << "è¯·è¾“å…¥å¯†ç :" << std::endl;
 	std::cin >> this->password;
 	system("cls");
 }
 
 void Menu::ShowRegisterMenu()
 {
-	std::cout << "----- »¶Ó­Ê¹ÓÃ×¢²áÏµÍ³ ------" << std::endl;
-	std::cout << "ÇëÊäÈëÓÃ»§Ãû:" << std::endl;
+	std::cout << "----- æ¬¢è¿Žä½¿ç”¨æ³¨å†Œç³»ç»Ÿ ------" << std::endl;
+	std::cout << "è¯·è¾“å…¥ç”¨æˆ·å:" << std::endl;
 	std::cin >> this->username;
-	std::cout << "ÇëÊäÈëÃÜÂë:" << std::endl;
+	std::cout << "è¯·è¾“å…¥å¯†ç :" << std::endl;
 	std::cin >> this->password;
-	std::cout << "ÇëÑ¡ÔñÄãµÄÐÔ±ð:" << std::endl;
-	std::cout << "1. ÄÐÐÔ" << std::endl;
-	std::cout << "2. Å®ÐÔ" << std::endl;
+	std::cout << "è¯·é€‰æ‹©ä½ çš„æ€§åˆ«:" << std::endl;
+	std::cout << "1. ç”·æ€§" << std::endl;
+	std::cout << "2. å¥³æ€§" << std::endl;
 	int choice = 0;
 	std::cin >> choice;
 	if (choice == 1)
@@ -80,35 +80,35 @@ void Menu::SetUserType(int userType)
 
 void Menu::ShowAdminMenu()
 {
-	std::cout << "----- »¶Ó­Ê¹ÓÃ¾§¶«³¬ÊÐ¹ÜÀíÏµÍ³ ------" << std::endl;
-	std::cout << "----- 1.²é¿´³¬ÊÐ¾­ÓªÇé¿ö ------------" << std::endl;
-	std::cout << "----- 2.»õÎï²¹³ä --------------------" << std::endl;
-	std::cout << "----- 3.¹ýÆÚ»õÎï´¦Àí ----------------" << std::endl;
+	std::cout << "----- æ¬¢è¿Žä½¿ç”¨æ™¶ä¸œè¶…å¸‚ç®¡ç†ç³»ç»Ÿ ------" << std::endl;
+	std::cout << "----- 1.æŸ¥çœ‹è¶…å¸‚ç»è¥æƒ…å†µ ------------" << std::endl;
+	std::cout << "----- 2.è´§ç‰©è¡¥å…… --------------------" << std::endl;
+	std::cout << "----- 3.è¿‡æœŸè´§ç‰©å¤„ç† ----------------" << std::endl;
 }
 void Menu::ShowOpenMenu()
 {
-	std::cout << "±¾ÈÕÓªÊÕÇé¿ö£º" << std::endl;
-	std::cout << "ÀúÊ·ÓªÊÕÇé¿ö£º" << std::endl;
+	std::cout << "æœ¬æ—¥è¥æ”¶æƒ…å†µï¼š" << std::endl;
+	std::cout << "åŽ†å²è¥æ”¶æƒ…å†µï¼š" << std::endl;
 }
 void Menu::ShowGiveMenu()
 {
-	std::cout << "Ä¿Ç°»õÎïÊ£ÓàÁ¿£º" << std::endl;
+	std::cout << "ç›®å‰è´§ç‰©å‰©ä½™é‡ï¼š" << std::endl;
 }
 void Menu::ShowPassMenu()
 {
-	std::cout << "Ä¿Ç°ÁÙÆÚ»õÎï³ÂÁÐ£º" << std::endl;
+	std::cout << "ç›®å‰ä¸´æœŸè´§ç‰©é™ˆåˆ—ï¼š" << std::endl;
 }
 void Menu::ShowGuestMenu(ProductService productService)
 {
-	std::cout << "----- »¶Ó­¹âÁÙ¾§¶«³¬ÊÐ ------" << std::endl;
-	std::cout << "----- 1.Ñ¡¹ºÉÌÆ· ------------" << std::endl;
-	std::cout << "----- 2.ÍË»»ÉÌÆ· ------------" << std::endl;
-	std::cout << "----- 3.ÎÒµÄÕË»§ ------------" << std::endl;
+	std::cout << "----- æ¬¢è¿Žå…‰ä¸´æ™¶ä¸œè¶…å¸‚ ------" << std::endl;
+	std::cout << "----- 1.é€‰è´­å•†å“ ------------" << std::endl;
+	std::cout << "----- 2.é€€æ¢å•†å“ ------------" << std::endl;
+	std::cout << "----- 3.æˆ‘çš„è´¦æˆ· ------------" << std::endl;
 	int num;
 	std::cin >> num;
 	if (num == 1)
 	{
-		std::vector<Product> products; // ÕâÊ±ºò¿Ï¶¨ÊÇ¿ÕÁÐ±í
+		std::vector<Product> products; // è¿™æ—¶å€™è‚¯å®šæ˜¯ç©ºåˆ—è¡¨
 		productService.GetAllProducts(products);
 		ShowShopMenu(products);
 	}
@@ -120,26 +120,26 @@ void Menu::ShowGuestMenu(ProductService productService)
 void Menu::ShowShopMenu(const std::vector<Product>& products)
 {
 	system("cls");
-	std::cout << "----- ÉÌÆ·ÁÐ±í -----" << std::endl;
+	std::cout << "----- å•†å“åˆ—è¡¨ -----" << std::endl;
 	if (products.empty()) 
 	{
-		std::cout << "Ã»ÓÐ¿ÉÓÃÉÌÆ·¡£" << std::endl;
+		std::cout << "æ²¡æœ‰å¯ç”¨å•†å“ã€‚" << std::endl;
 		return;
 	}
 
-	// ÏÔÊ¾ÉÌÆ·ÁÐ±í
+	// æ˜¾ç¤ºå•†å“åˆ—è¡¨
 	for (const auto& product : products) 
 	{
-		product.Print();  // Ê¹ÓÃ Product ÀàÖÐµÄ Print ·½·¨ÏÔÊ¾ÉÌÆ·ÐÅÏ¢
+		product.Print();  // ä½¿ç”¨ Product ç±»ä¸­çš„ Print æ–¹æ³•æ˜¾ç¤ºå•†å“ä¿¡æ¯
 	}
 
-	std::cout << "ÇëÑ¡ÔñÉÌÆ·±àºÅ¹ºÂò£º" << std::endl;
+	std::cout << "è¯·é€‰æ‹©å•†å“ç¼–å·è´­ä¹°ï¼š" << std::endl;
 	int productId;
 	std::cin >> productId;
 }
 void Menu::ShowBackMenu()
 {
-	std::cout << "ÇëÑ¡ÔñÒªÍË»¹µÄÉÌÆ·£º" << std::endl;
+	std::cout << "è¯·é€‰æ‹©è¦é€€è¿˜çš„å•†å“ï¼š" << std::endl;
 }
 void Menu::ShowMyselfMenu()
 {

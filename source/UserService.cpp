@@ -1,4 +1,4 @@
-#include "../include/UserService.h"
+ï»¿#include "../include/UserService.h"
 
 UserService::UserService(UserDAO& dao)
     : dao(dao) {}
@@ -14,10 +14,10 @@ bool UserService::Register(User& user)
 }
 
 //bool UserService::Register(const User& user) {
-//    // ¿ÉÔÚÕâÀï×ö¼ì²é£¬ÀıÈçÓÃ»§ÃûÊÇ·ñÖØ¸´
+//    // å¯åœ¨è¿™é‡Œåšæ£€æŸ¥ï¼Œä¾‹å¦‚ç”¨æˆ·åæ˜¯å¦é‡å¤
 //    User tmp;
 //    if (dao.GetUserByName(user.username, tmp)) {
-//        std::cout << "ÓÃ»§ÃûÒÑ´æÔÚ£¡" << std::endl;
+//        std::cout << "ç”¨æˆ·åå·²å­˜åœ¨ï¼" << std::endl;
 //        return false;
 //    }
 //

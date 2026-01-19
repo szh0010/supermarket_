@@ -1,4 +1,4 @@
-#pragma once
+ï»¿#pragma once
 #include <iostream>
 #include <string>
 #include <vector>
@@ -16,11 +16,11 @@ using namespace std;
 class Connector
 {
 public:
-    // [yyx] ÖØ¹¹
-    Connector();  // ×Ô¶¯¶ÁÈ¡ config.ini ²¢Á¬½ÓÊı¾İ¿â
-    ~Connector();  // Îö¹¹ÊÍ·Å×ÊÔ´
-    sql::ResultSet* Query(const std::string& sql); // Ö´ĞĞ SELECT ´ÓÊı¾İ¿âÖĞ²éÑ¯Êı¾İ
-    int Execute(const std::string& sql);// Ö´ĞĞ INSERT/UPDATE/DELETE 
+    // [yyx] é‡æ„
+    Connector();  // è‡ªåŠ¨è¯»å– config.ini å¹¶è¿æ¥æ•°æ®åº“
+    ~Connector();  // ææ„é‡Šæ”¾èµ„æº
+    sql::ResultSet* Query(const std::string& sql); // æ‰§è¡Œ SELECT ä»æ•°æ®åº“ä¸­æŸ¥è¯¢æ•°æ®
+    int Execute(const std::string& sql);// æ‰§è¡Œ INSERT/UPDATE/DELETE 
 
     std::unique_ptr<sql::PreparedStatement> Prepare(const std::string& sql);
     bool IsConnected() const { return conn != nullptr; }
@@ -31,8 +31,8 @@ public:
     
 private:
     // [yyx]
-    void LoadConfig();               // ´Ó config.ini ¶ÁÈ¡ÅäÖÃ
-    bool Connect();                  // Á¬½ÓÊı¾İ¿â
+    void LoadConfig();               // ä» config.ini è¯»å–é…ç½®
+    bool Connect();                  // è¿æ¥æ•°æ®åº“
 
 
 private:
@@ -45,7 +45,7 @@ private:
 
     sql::mysql::MySQL_Driver* driver; 
 
-    std::shared_ptr<sql::Connection> conn; // ÕâÀïÓÃsharedÖ¸Õë
+    std::shared_ptr<sql::Connection> conn; // è¿™é‡Œç”¨sharedæŒ‡é’ˆ
 
 };
 

@@ -1,4 +1,4 @@
-#include "../include/UserDAO.h"
+ï»¿#include "../include/UserDAO.h"
 #include <jdbc/cppconn/prepared_statement.h>
 
 UserDAO::UserDAO(Connector& conn)
@@ -10,15 +10,15 @@ bool UserDAO::GetUserByName(const std::string& username, User& outUser) {
         std::unique_ptr<sql::PreparedStatement> stmt(
             connPtr->prepareStatement("SELECT * FROM UserInfo WHERE username = ?")
         );
-        stmt->setString(1, username); // ÕâÀïµÄ 1 ºÍµÚÒ»¸ö ? Ò²¾ÍÊÇ"username = ?"ÊÇ¶ÔÓ¦µÄ¹ØÏµ
+        stmt->setString(1, username); // è¿™é‡Œçš„ 1 å’Œç¬¬ä¸€ä¸ª ? ä¹Ÿå°±æ˜¯"username = ?"æ˜¯å¯¹åº”çš„å…³ç³»
 
         std::unique_ptr<sql::ResultSet> res(stmt->executeQuery());
         if (!res->next()) {
             return false;
         }
-        // ½âÎöÈ¡µÃµÄ½á¹û£¬²¢ÇÒ°Ñ½á¹û¸³Öµ¸øoutUser
-        // Ë¼¿¼Ìâ£¬ÎªÊ²Ã´ÕâÀï¿ÉÒÔ°Ñ½á¹û¸³Öµ¸øoutUser£¿
-        // ÏÂ´ÎÌá½»µÄÊ±ºò»Ø´ğĞ´ÔÚÕâÀï£º
+        // è§£æå–å¾—çš„ç»“æœï¼Œå¹¶ä¸”æŠŠç»“æœèµ‹å€¼ç»™outUser
+        // æ€è€ƒé¢˜ï¼Œä¸ºä»€ä¹ˆè¿™é‡Œå¯ä»¥æŠŠç»“æœèµ‹å€¼ç»™outUserï¼Ÿ
+        // ä¸‹æ¬¡æäº¤çš„æ—¶å€™å›ç­”å†™åœ¨è¿™é‡Œï¼š
         outUser.id = res->getInt("id");
         outUser.username = res->getString("username");
         outUser.password = res->getString("password");
@@ -45,22 +45,22 @@ bool UserDAO::ValidateLogin(const std::string& username, const std::string& pass
                 "SELECT * FROM UserInfo WHERE username = ? AND password = ?"
             )
         );
-        // ºÍGetUserByNameÊÇÍ¬ÑùµÄµÀÀí
-        stmt->setString(1, username); // ÕâÀïµÄ 1 ºÍµÚÒ»¸ö ? Ò²¾ÍÊÇ"username = ?"ÊÇ¶ÔÓ¦µÄ¹ØÏµ
-        stmt->setString(2, password); // ÕâÀïµÄ 2 ºÍµÚ¶ş¸ö ? Ò²¾ÍÊÇ"password = ?"ÊÇ¶ÔÓ¦µÄ¹ØÏµ
+        // å’ŒGetUserByNameæ˜¯åŒæ ·çš„é“ç†
+        stmt->setString(1, username); // è¿™é‡Œçš„ 1 å’Œç¬¬ä¸€ä¸ª ? ä¹Ÿå°±æ˜¯"username = ?"æ˜¯å¯¹åº”çš„å…³ç³»
+        stmt->setString(2, password); // è¿™é‡Œçš„ 2 å’Œç¬¬äºŒä¸ª ? ä¹Ÿå°±æ˜¯"password = ?"æ˜¯å¯¹åº”çš„å…³ç³»
 
         std::unique_ptr<sql::ResultSet> res(stmt->executeQuery());
         if (!res->next()) {
             return false;
         }
-        // Ë¼¿¼Ìâ£º
-        // 1. ÕâÀïÊÇÈçºÎÅĞ¶ÏÓÃ»§³É¹¦µÇÂ¼µÄ£¿
-        // 2. Èç¹ûµÇÂ¼Ê§°ÜÁË£¬ËµÃ÷ÊÇÊ²Ã´Çé¿ö£¿
-        // 3. µÇÂ¼Ê§°Ü»¹»á°ÑoutUser¸ø¸³ÖµÂğ£¿
-        // ×÷´ğÇø£º
-        // 1. Í¨¹ıÓÃ»§ÊäÈëµÄÕËºÅÃÜÂëÓëÊı¾İ¿â½øĞĞ±È¶Ô£¬Êı¾İÒ»ÖÂÔòµÇÂ¼³É¹¦
-        // 2. µÇÂ¼Ê§°ÜËµÃ÷ÕËºÅ»òÕßÃÜÂëÓĞÎó
-        // 3. ²»»á
+        // æ€è€ƒé¢˜ï¼š
+        // 1. è¿™é‡Œæ˜¯å¦‚ä½•åˆ¤æ–­ç”¨æˆ·æˆåŠŸç™»å½•çš„ï¼Ÿ
+        // 2. å¦‚æœç™»å½•å¤±è´¥äº†ï¼Œè¯´æ˜æ˜¯ä»€ä¹ˆæƒ…å†µï¼Ÿ
+        // 3. ç™»å½•å¤±è´¥è¿˜ä¼šæŠŠoutUserç»™èµ‹å€¼å—ï¼Ÿ
+        // ä½œç­”åŒºï¼š
+        // 1. é€šè¿‡ç”¨æˆ·è¾“å…¥çš„è´¦å·å¯†ç ä¸æ•°æ®åº“è¿›è¡Œæ¯”å¯¹ï¼Œæ•°æ®ä¸€è‡´åˆ™ç™»å½•æˆåŠŸ
+        // 2. ç™»å½•å¤±è´¥è¯´æ˜è´¦å·æˆ–è€…å¯†ç æœ‰è¯¯
+        // 3. ä¸ä¼š
         outUser.id = res->getInt("id");
         outUser.username = res->getString("username");
         outUser.password = res->getString("password");
@@ -79,7 +79,7 @@ bool UserDAO::ValidateLogin(const std::string& username, const std::string& pass
     }
 }
 
-// ´Ëº¯ÊıÎªºóĞø×¢²áÓÃ»§Ê¹ÓÃ£¬½«ÓÃ»§µÄĞÅÏ¢Ğ´ÈëÊı¾İ¿âÖĞ
+// æ­¤å‡½æ•°ä¸ºåç»­æ³¨å†Œç”¨æˆ·ä½¿ç”¨ï¼Œå°†ç”¨æˆ·çš„ä¿¡æ¯å†™å…¥æ•°æ®åº“ä¸­
 bool UserDAO::AddUser(User& user) {
     try {
         auto connPtr = connector.GetConnection();

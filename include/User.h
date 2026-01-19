@@ -1,20 +1,20 @@
-#pragma once
+ï»¿#pragma once
 #include <string>
 
 // [yyx]
-// User ÊµÌåÀà
-// Êı¾İ¿â¶ÁÈ¡ÓÃ»§Êı¾İ£¬×îºó»á´æÔÚÕâ¸öÀàÖĞ
+// User å®ä½“ç±»
+// æ•°æ®åº“è¯»å–ç”¨æˆ·æ•°æ®ï¼Œæœ€åä¼šå­˜åœ¨è¿™ä¸ªç±»ä¸­
 class User {
 public:
     int id = 0;
     std::string username;
     std::string password;
-    int user_type = 0;  // 0=¹Ë¿Í, 1=¹ÜÀíÔ±
+    int user_type = 0;  // 0=é¡¾å®¢, 1=ç®¡ç†å‘˜
     int score = 0;
-    int is_vip = 0;     // 0=·ÇVIP, 1=VIP
-    std::string gender; // "" Ä¬ÈÏÊÇ¿Õ£¬ËùÒÔÕâÀï×¢²áÒªÓÃ»§À´Ñ¡Ôñ
+    int is_vip = 0;     // 0=éVIP, 1=VIP
+    std::string gender; // "" é»˜è®¤æ˜¯ç©ºï¼Œæ‰€ä»¥è¿™é‡Œæ³¨å†Œè¦ç”¨æˆ·æ¥é€‰æ‹©
     int age = 0;
     std::string created_at;
 
-    User() = default; // Ä¬ÈÏ¹¹Ôìº¯Êı
+    User() = default; // é»˜è®¤æ„é€ å‡½æ•°
 };

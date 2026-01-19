@@ -1,15 +1,15 @@
-#pragma once
+ï»¿#pragma once
 #include "UserDAO.h"
 
-// ÒµÎñÂß¼­²ã
-// Service = ·şÎñ
+// ä¸šåŠ¡é€»è¾‘å±‚
+// Service = æœåŠ¡
 class UserService {
 public:
     UserService(UserDAO& dao);
 
-    bool Login(const std::string& username, const std::string& password, User& userOut); // µÇÂ¼ÓÃ»§Âß¼­
+    bool Login(const std::string& username, const std::string& password, User& userOut); // ç™»å½•ç”¨æˆ·é€»è¾‘
 
-    //bool Register(const User& user); // ×¢²áÓÃ»§Âß¼­
+    //bool Register(const User& user); // æ³¨å†Œç”¨æˆ·é€»è¾‘
     bool Register(User& user);
 
 

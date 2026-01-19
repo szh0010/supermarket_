@@ -1,8 +1,8 @@
-#pragma once
+ï»¿#pragma once
 #include "ProductDAO.h"
 
-// ÒµÎñÂß¼­²ã
-// Service = ·şÎñ
+// ä¸šåŠ¡é€»è¾‘å±‚
+// Service = æœåŠ¡
 class ProductService {
 public:
     ProductService(ProductDAO& dao);

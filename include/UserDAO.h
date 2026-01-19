@@ -1,19 +1,19 @@
-#pragma once
+ï»¿#pragma once
 #include <string>
 #include <memory>
 #include "User.h"
 #include "Connector.h"
 
 // [yyx]
-// Êı¾İ¿â²ã£¬Õâ¸öÓÃÓÚºÍÊı¾İ¿â½»»¥
+// æ•°æ®åº“å±‚ï¼Œè¿™ä¸ªç”¨äºå’Œæ•°æ®åº“äº¤äº’
 // DAO D database A acesss O Object
-// ¶ÔÊı¾İ¿âµÄÊı¾İ½øĞĞÔöÉ¾¸Ä²é
+// å¯¹æ•°æ®åº“çš„æ•°æ®è¿›è¡Œå¢åˆ æ”¹æŸ¥
 class UserDAO {
 public:
     UserDAO(Connector& conn);
 
     bool GetUserByName(const std::string& username, User& outUser);
-    bool ValidateLogin(const std::string& username, const std::string& password, User& outUser); // ÑéÖ¤ÓÃ»§ÊÇ·ñµÇÂ¼³É¹¦
+    bool ValidateLogin(const std::string& username, const std::string& password, User& outUser); // éªŒè¯ç”¨æˆ·æ˜¯å¦ç™»å½•æˆåŠŸ
 
     bool AddUser(User& user);
 

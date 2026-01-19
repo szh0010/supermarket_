@@ -1,11 +1,11 @@
-#include "../include/Config.h" // [yyx] ¶ÁÈ¡ÎÄ¼ş¼ĞÏÂµÄconfig.ini ÅäÖÃÎÄ¼ş
+ï»¿#include "../include/Config.h" // [yyx] è¯»å–æ–‡ä»¶å¤¹ä¸‹çš„config.ini é…ç½®æ–‡ä»¶
 #include "../include/Connector.h"
 #include "../include/Menu.h"
 #include "../include/User.h"
 #include "../include/UserDAO.h"
 #include "../include/UserService.h"
 #include "../include/ProductDAO.h"
-#include "../include/ProductService.h"
+#include <windows.h>
 
 using namespace std;
 
@@ -16,8 +16,8 @@ void HandleLogin(Menu& menu, UserService& userService, User& loginUser,ProductSe
     string password = menu.GetPassword();
     if (userService.Login(username, password, loginUser))
     {
-        cout << "µÇÂ¼³É¹¦!" << endl;
-        cout << "»¶Ó­" << loginUser.username << endl;
+        cout << "ç™»å½•æˆåŠŸ!" << endl;
+        cout << "æ¬¢è¿" << loginUser.username << endl;
         if (loginUser.user_type == 1)
         {
             menu.ShowAdminMenu();
@@ -29,7 +29,7 @@ void HandleLogin(Menu& menu, UserService& userService, User& loginUser,ProductSe
     }
     else
     {
-        cout << "ÕËºÅ»òÃÜÂë´íÎó£¡" << endl;
+        cout << "è´¦å·æˆ–å¯†ç é”™è¯¯ï¼" << endl;
     }
 }
 
@@ -44,24 +44,25 @@ void HandleRegister(Menu& menu, UserService& userService, User& registerUser, Pr
     registerUser.gender = gender;
     if (userService.Register(registerUser))
     {
-        cout << "×¢²á³É¹¦£¡" << endl;
+        cout << "æ³¨å†ŒæˆåŠŸï¼" << endl;
         HandleLogin(menu, userService, registerUser,productService);
     }
     else
    {
-        cout << "×¢²áÊ§°Ü£¬ÇëÖØÊÔ£¡" << endl;
+        cout << "æ³¨å†Œå¤±è´¥ï¼Œè¯·é‡è¯•ï¼" << endl;
     }
 }
 
 int main() {
 
+    SetConsoleOutputCP(65001);
 
     Config::Instance().Load("E:/c++code/supermarket/config.ini");
 
-    // ³õÊ¼»¯Êı¾İ¿âÁ¬½Ó
+    // åˆå§‹åŒ–æ•°æ®åº“è¿æ¥
     Connector db;
-    UserDAO userDao(db); // ½«ÓÃ»§µÄÊı¾İ¿â²ã´ò¿ª
-    UserService userService(userDao); // ½«ÓÃ»§µÄÒµÎñ²ã´ò¿ª
+    UserDAO userDao(db); // å°†ç”¨æˆ·çš„æ•°æ®åº“å±‚æ‰“å¼€
+    UserService userService(userDao); // å°†ç”¨æˆ·çš„ä¸šåŠ¡å±‚æ‰“å¼€
     ProductDAO productDao(db);
     ProductService productService(productDao);
     
@@ -73,8 +74,8 @@ int main() {
     menu.ShowEnterMenu();
     string username = menu.GetUsername();
     string password = menu.GetPassword();
-    User loginUser; // ÓÃ»§µÇÂ¼
-    User registerUser; //ÓÃ»§×¢²á
+    User loginUser; // ç”¨æˆ·ç™»å½•
+    User registerUser; //ç”¨æˆ·æ³¨å†Œ
     int choice;
     cin >> choice;
     if (choice == 1)
@@ -87,7 +88,7 @@ int main() {
     }
     else
     {
-        cout << "ÊäÈëÓĞÎó" << endl;
+        cout << "è¾“å…¥æœ‰è¯¯" << endl;
     }
 
 

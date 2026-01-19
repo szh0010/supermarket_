@@ -1,4 +1,4 @@
-#include "../include/ProductDAO.h"
+ï»¿#include "../include/ProductDAO.h"
 #include <jdbc/cppconn/prepared_statement.h>
 
 ProductDAO::ProductDAO(Connector& conn)
@@ -29,8 +29,8 @@ bool ProductDAO::GetProductAll(vector<Product>& outProducts)
             products.emplace_back(temp);
             count++;
         }
-        std::cout << "²éÑ¯µ½µÄÉÌÆ·ÊýÁ¿: " << count << std::endl; // ´òÓ¡ÉÌÆ·ÊýÁ¿
-        outProducts = products; // productsÎÒÃÇ´ÓÊý¾Ý¿âÖÐ²éµ½µÄÖµ£¬°ÑÕâ¸öÈ«²¿µÄÉÌÆ·ÐÅÏ¢¸³Öµ¸øoutProducts
+        std::cout << "æŸ¥è¯¢åˆ°çš„å•†å“æ•°é‡: " << count << std::endl; // æ‰“å°å•†å“æ•°é‡
+        outProducts = products; // productsæˆ‘ä»¬ä»Žæ•°æ®åº“ä¸­æŸ¥åˆ°çš„å€¼ï¼ŒæŠŠè¿™ä¸ªå…¨éƒ¨çš„å•†å“ä¿¡æ¯èµ‹å€¼ç»™outProducts
         return true;
     }
     catch (sql::SQLException& e) {
