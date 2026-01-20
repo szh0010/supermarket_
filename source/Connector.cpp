@@ -2,11 +2,9 @@
 #include "../include/Config.h"
 #include "../include/Product.h"
 #include <vector>
+
 // [yyx] - 12.3重构
-//初始化构造函数
-
-// 该方法执行查询并返回结果集
-
+// 初始化构造函数
 Connector::Connector()
 {
 	LoadConfig();
@@ -35,7 +33,8 @@ bool Connector::Connect()
 {
 	try {
 		driver = sql::mysql::get_mysql_driver_instance();
-		conn = std::unique_ptr<sql::Connection>(driver->connect(host, user, password));
+		// 注意：此处 conn 需为 shared_ptr 确保兼容其他方法
+		conn = std::shared_ptr<sql::Connection>(driver->connect(host, user, password));
 		conn->setSchema(database);
 
 		// --- 核心修改开始 ---
@@ -48,9 +47,43 @@ bool Connector::Connect()
 		return true;
 	}
 	catch (sql::SQLException& e) {
-		// ... 原有的错误处理 ...
+		std::cerr << "[DB Error] 连接失败: " << e.what() << std::endl;
+		return false;
 	}
 }
+
+// --- 新增：获取商品列表的核心逻辑 ---
+std::vector<Product> Connector::GetProducts() {
+	std::vector<Product> products;
+	try {
+		if (!conn || conn->isClosed()) {
+			Connect();
+		}
+
+		// 1. 创建 Statement，生命周期覆盖整个读取过程
+		std::unique_ptr<sql::Statement> stmt(conn->createStatement());
+
+		// 2. 确保使用了 ORDER BY id ASC 排序，防止 ID 乱序或找不到大米
+		std::unique_ptr<sql::ResultSet> res(stmt->executeQuery("SELECT id, product_name, price, stock FROM products ORDER BY id ASC"));
+
+		while (res->next()) {
+			// 3. 从结果集中读取数据
+			int id = res->getInt("id");
+			std::string name = res->getString("product_name");
+			double price = res->getDouble("price");
+			int stock = res->getInt("stock");
+
+			// 4. 利用 emplace_back 调用 Product 的构造函数
+			// 这样可以直接初始化 private 成员变量
+			products.emplace_back(id, name, price, stock);
+		}
+	}
+	catch (sql::SQLException& e) {
+		std::cerr << "[DB Error] 获取商品失败: " << e.what() << std::endl;
+	}
+	return products;
+}
+
 int Connector::Execute(const std::string& sql)
 {
 	try {
@@ -85,29 +118,23 @@ std::shared_ptr<sql::Connection> Connector::GetConnection() {
 // 在 Connector.cpp 中定义 Query 方法
 sql::ResultSet* Connector::Query(const std::string& sql) {
 	try {
-		std::unique_ptr<sql::Statement> stmt(conn->createStatement());  // 创建 Statement 对象
-		sql::ResultSet* res = stmt->executeQuery(sql);  // 执行查询并获取结果集
-		return res;
+		sql::Statement* stmt = conn->createStatement();  // 注意：手动模式
+		return stmt->executeQuery(sql);
 	}
 	catch (sql::SQLException& e) {
-		std::cerr << "SQLException: " << e.what() << std::endl;  // 错误处理
-		return nullptr;  // 查询失败时返回空指针
+		std::cerr << "SQLException: " << e.what() << std::endl;
+		return nullptr;
 	}
 }
-
 
 sql::ResultSet* Connector::GetResultPointer(const sql::SQLString& query)
 {
 	try {
-		std::unique_ptr<sql::Statement> stmt(conn->createStatement());
-		sql::ResultSet* res = stmt->executeQuery(query);  // 执行查询并返回结果
-		return res;
+		sql::Statement* stmt = conn->createStatement();
+		return stmt->executeQuery(query);
 	}
 	catch (sql::SQLException& e) {
 		std::cerr << "SQLException: " << e.what() << std::endl;
-		return nullptr;  // 查询失败时返回空指针
+		return nullptr;
 	}
 }
-
-
-

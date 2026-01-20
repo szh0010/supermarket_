@@ -19,6 +19,11 @@ public:
 	{
 		std::cout << "ID: " << id << ", Name: " << name<< ", Price: " << price << ", Stock: " << stock << std::endl;
 	}
+
+	int GetId() const { return id; }
+	int GetStock() const { return stock; }
+	std::string GetName() const { return name; }
+
 private:
 	int id;             // 商品ID
 	std::string name;   // 商品名称

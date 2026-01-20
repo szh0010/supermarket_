@@ -10,27 +10,35 @@ bool ProductDAO::GetProductAll(vector<Product>& outProducts)
     vector<Product> products;
     try {
         auto connPtr = connector.GetConnection();
+        // 建议加上 ORDER BY id ASC 确保顺序
         std::unique_ptr<sql::PreparedStatement> stmt(
-            connPtr->prepareStatement("SELECT * FROM products")
+            connPtr->prepareStatement("SELECT id, product_name, price, stock FROM products ORDER BY id ASC")
         );
-        
+
         std::unique_ptr<sql::ResultSet> res(stmt->executeQuery());
-        if (!res->next()) {
+
+        int count = 0;
+        // 直接进入 while 循环，不要在循环外面写 res->next()
+        while (res->next())
+        {
+            // 提取数据
+            int id = res->getInt("id");
+            std::string name = res->getString("product_name");
+            double price = res->getDouble("price");
+            int stock = res->getInt("stock");
+
+            // 通过构造函数添加
+            products.emplace_back(id, name, price, stock);
+            count++;
+        }
+
+        if (count == 0) {
+            std::cout << "[DAO] 数据库中没有商品记录。" << std::endl;
             return false;
         }
 
-        int count = 0;
-        while (res->next())
-        {
-            Product temp(res->getInt("id"),
-                res->getString("product_name"),
-                res->getDouble("price"), 0);
-
-            products.emplace_back(temp);
-            count++;
-        }
-        std::cout << "查询到的商品数量: " << count << std::endl; // 打印商品数量
-        outProducts = products; // products我们从数据库中查到的值，把这个全部的商品信息赋值给outProducts
+        std::cout << "查询到的商品数量: " << count << std::endl;
+        outProducts = products;
         return true;
     }
     catch (sql::SQLException& e) {

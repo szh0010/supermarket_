@@ -136,6 +136,35 @@ void Menu::ShowShopMenu(const std::vector<Product>& products)
 	std::cout << "请选择商品编号购买：" << std::endl;
 	int productId;
 	std::cin >> productId;
+	if (productId == 0) return;
+
+	// 查找选中的商品
+	bool found = false;
+	for (const auto& product : products)
+	{
+		if (product.GetId() == productId) // 匹配编号
+		{
+			found = true;
+			if (product.GetStock() > 0) // 逻辑判断
+			{
+				std::cout << "【购买成功】您已购买: " << product.GetName() << std::endl;
+				// 注意：这里只是前端提示，真实库存扣除需要调用数据库 Update 语句
+			}
+			else
+			{
+				std::cout << "【购买失败】商品 \"" << product.GetName() << "\" 库存为0！" << std::endl;
+			}
+			break;
+		}
+	}
+
+	if (!found)
+	{
+		std::cout << "未找到编号为 " << productId << " 的商品。" << std::endl;
+	}
+
+	std::cout << "\n按任意键继续..." << std::endl;
+	system("pause");
 }
 void Menu::ShowBackMenu()
 {
