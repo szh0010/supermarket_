@@ -62,7 +62,7 @@ void Menu::ShowOpenMenu()
 void Menu::ShowGiveMenu() { std::cout << "目前货物剩余量：" << std::endl; }
 void Menu::ShowPassMenu() { std::cout << "目前临期货物陈列：" << std::endl; }
 
-// 修改 1: 增加 Connector& db 参数
+// 修改 1: 增加 Connector& db 参数并正确分发
 void Menu::ShowGuestMenu(ProductService productService, Connector& db)
 {
     while (true) {
@@ -78,13 +78,13 @@ void Menu::ShowGuestMenu(ProductService productService, Connector& db)
         if (num == 1) {
             std::vector<Product> products;
             productService.GetAllProducts(products);
-            ShowShopMenu(products, db); // 传递 db
+            ShowShopMenu(products, db);
         }
         else if (num == 2) {
-            ShowBackMenu();
+            ShowBackMenu(db); // 已修复：传入 db 参数
         }
         else if (num == 3) {
-            ShowMyselfMenu(db); // 传递 db
+            ShowMyselfMenu(db);
         }
         else if (num == 0) {
             break;
@@ -99,6 +99,7 @@ void Menu::ShowShopMenu(const std::vector<Product>& products, Connector& db)
     std::cout << "----- 商品列表 -----" << std::endl;
     if (products.empty()) {
         std::cout << "没有可用商品。" << std::endl;
+        system("pause");
         return;
     }
 
@@ -130,11 +131,10 @@ void Menu::ShowShopMenu(const std::vector<Product>& products, Connector& db)
                     pstmt->setString(1, this->username);
                     pstmt->setInt(2, product.GetId());
                     pstmt->setString(3, product.GetName());
-                    pstmt->setDouble(4, product.GetPrice()); // 确保 Product.h 有 GetPrice() 方法
+                    pstmt->setDouble(4, product.GetPrice());
 
                     pstmt->executeUpdate();
-
-                    std::cout << "【购买成功】您已购买: " << product.GetName() << "，记录已同步到您的账户。" << std::endl;
+                    std::cout << "【购买成功】记录已同步到您的账户。" << std::endl;
                 }
                 catch (sql::SQLException& e) {
                     std::cerr << "【数据库错误】购买失败: " << e.what() << std::endl;
@@ -151,9 +151,74 @@ void Menu::ShowShopMenu(const std::vector<Product>& products, Connector& db)
     system("pause");
 }
 
-void Menu::ShowBackMenu() { std::cout << "请选择要退还的商品：" << std::endl; system("pause"); }
+// 修改 3: 完善退换商品逻辑
+void Menu::ShowBackMenu(Connector& db)
+{
+    system("cls");
+    std::cout << "----- 退换商品中心 (" << this->username << ") -----" << std::endl;
+    std::cout << "按时间倒序排列的购买历史：" << std::endl;
 
-// 修改 3: 实现进入账户后查询记录
+    // 定义临时结构体存储查询结果
+    struct RecordEntry {
+        int recordId;
+        int productId;
+        string productName;
+    };
+    std::vector<RecordEntry> currentHistory;
+
+    try {
+        // 按照购买时间进行排序查询
+        string sql = "SELECT record_id, product_id, product_name, buy_price, buy_time FROM buy_records WHERE username = '" + this->username + "' ORDER BY buy_time DESC";
+        sql::ResultSet* res = db.Query(sql);
+
+        if (!res || res->rowsCount() == 0) {
+            std::cout << "暂无购买记录，无法办理退换。" << std::endl;
+            if (res) delete res;
+            system("pause");
+            return;
+        }
+
+        std::cout << std::left << std::setw(6) << "序号" << std::setw(15) << "商品名称" << std::setw(10) << "金额" << "购买时间" << std::endl;
+        std::cout << "------------------------------------------------------------" << std::endl;
+
+        int index = 1;
+        while (res->next()) {
+            std::cout << std::left << std::setw(6) << index
+                << std::setw(15) << res->getString("product_name")
+                << std::setw(10) << res->getDouble("buy_price")
+                << res->getString("buy_time") << std::endl;
+
+            // 将关键信息存入内存列表
+            currentHistory.push_back({ res->getInt("record_id"), res->getInt("product_id"), res->getString("product_name") });
+            index++;
+        }
+        delete res;
+
+        std::cout << "\n请输入要退换商品的【序号】(输入0返回): ";
+        int choice;
+        std::cin >> choice;
+
+        if (choice > 0 && choice < index) {
+            RecordEntry selected = currentHistory[choice - 1];
+
+            // 1. 恢复商品库存
+            string restoreSql = "UPDATE products SET stock = stock + 1 WHERE id = " + std::to_string(selected.productId);
+            db.Execute(restoreSql);
+
+            // 2. 从记录表中删除该次购买记录
+            string deleteSql = "DELETE FROM buy_records WHERE record_id = " + std::to_string(selected.recordId);
+            db.Execute(deleteSql);
+
+            std::cout << "【退换成功】商品 \"" << selected.productName << "\" 已成功退货，库存已返还。" << std::endl;
+        }
+    }
+    catch (sql::SQLException& e) {
+        std::cout << "退换操作失败: " << e.what() << std::endl;
+    }
+    system("pause");
+}
+
+// 修改 4: 实现账户记录查询
 void Menu::ShowMyselfMenu(Connector& db)
 {
     system("cls");
@@ -169,7 +234,6 @@ void Menu::ShowMyselfMenu(Connector& db)
     if (choice == 1) {
         std::cout << "\n正在加载您的历史记录..." << std::endl;
         try {
-            // 查询 buy_records 表
             string sql = "SELECT product_name, buy_price, buy_time FROM buy_records WHERE username = '" + this->username + "' ORDER BY buy_time DESC";
             sql::ResultSet* res = db.Query(sql);
 
@@ -185,7 +249,7 @@ void Menu::ShowMyselfMenu(Connector& db)
                         << res->getString("buy_time") << std::endl;
                 }
             }
-            delete res; // 必须手动释放 ResultSet 指针
+            delete res;
         }
         catch (sql::SQLException& e) {
             std::cout << "查询记录失败: " << e.what() << std::endl;

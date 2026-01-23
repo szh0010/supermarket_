@@ -23,7 +23,7 @@ public:
 	void ShowGiveMenu();
 	void ShowPassMenu();
 	void ShowShopMenu(const std::vector<Product>& products, Connector& db);
-	void ShowBackMenu();
+	void ShowBackMenu(Connector& db);
 	void ShowMyselfMenu(Connector& db);
 	void ShowEnterMenu();
 	void ShowRegisterMenu();
