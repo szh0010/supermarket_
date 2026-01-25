@@ -2,258 +2,220 @@
 #include "../include/Product.h"
 #include "../include/Connector.h"
 #include <vector>
-#include <iomanip> // 用于格式化输出
+#include <iomanip>
+#include <iostream>
 
-void Menu::ShowEnterMenu()
-{
-    std::cout << "----- 欢迎使用晶东超市系统 ------" << std::endl;
-    std::cout << "1.老用户登录" << std::endl << "2.新用户注册" << std::endl;
-}
+using namespace std;
 
-void Menu::ShowLoginMenu()
-{
-    std::cout << "----- 欢迎使用晶东超市系统 ------" << std::endl;
-    std::cout << "请输入用户名:" << std::endl;
-    std::cin >> this->username;
-    std::cout << "请输入密码:" << std::endl;
-    std::cin >> this->password;
-    system("cls");
-}
+// --- 基础 getter/setter 实现 (补齐链接缺失的符号) ---
 
-void Menu::ShowRegisterMenu()
-{
-    std::cout << "----- 欢迎使用注册系统 ------" << std::endl;
-    std::cout << "请输入用户名:" << std::endl;
-    std::cin >> this->username;
-    std::cout << "请输入密码:" << std::endl;
-    std::cin >> this->password;
-    std::cout << "请选择你的性别:" << std::endl;
-    std::cout << "1. 男性" << std::endl;
-    std::cout << "2. 女性" << std::endl;
-    int choice = 0;
-    std::cin >> choice;
-    if (choice == 1) SetGender("male");
-    else if (choice == 2) SetGender("female");
-    else SetGender("other");
-    system("cls");
-}
-
-void Menu::SetGender(const std::string gender) { this->gender = gender; }
+// 必须实现这些函数，否则 main.cpp 调用时会报 LNK2001
+string Menu::GetUsername() { return this->username; }
+string Menu::GetPassword() { return this->password; }
+string Menu::GetGender() { return this->gender; }
 int Menu::GetUserType() { return this->userType; }
-std::string Menu::GetUsername() { return this->username; }
-std::string Menu::GetPassword() { return this->password; }
-std::string Menu::GetGender() { return this->gender; }
+
+void Menu::SetGender(const string gender) { this->gender = gender; }
 void Menu::SetUserType(int userType) { this->userType = userType; }
 
-void Menu::ShowAdminMenu()
-{
-    std::cout << "----- 欢迎使用晶东超市管理系统 ------" << std::endl;
-    std::cout << "----- 1.查看超市经营情况 ------------" << std::endl;
-    std::cout << "----- 2.货物补充 --------------------" << std::endl;
-    std::cout << "----- 3.过期货物处理 ----------------" << std::endl;
+// --- 基础登录与注册功能 ---
+
+void Menu::ShowEnterMenu() {
+    cout << "----- 欢迎使用晶东超市系统 ------" << endl;
+    cout << "1.老用户登录" << endl << "2.新用户注册" << endl;
 }
 
-void Menu::ShowOpenMenu()
-{
-    std::cout << "本日营收情况：" << std::endl;
-    std::cout << "历史营收情况：" << std::endl;
+void Menu::ShowLoginMenu() {
+    cout << "----- 欢迎使用晶东超市系统 ------" << endl;
+    cout << "请输入用户名: ";
+    cin >> this->username;
+    cout << "请输入密码: ";
+    cin >> this->password;
+    system("cls");
 }
 
-void Menu::ShowGiveMenu() { std::cout << "目前货物剩余量：" << std::endl; }
-void Menu::ShowPassMenu() { std::cout << "目前临期货物陈列：" << std::endl; }
+void Menu::ShowRegisterMenu() {
+    cout << "----- 欢迎使用注册系统 ------" << endl;
+    cout << "请输入用户名: ";
+    cin >> this->username;
+    cout << "请输入密码: ";
+    cin >> this->password;
+    cout << "请选择你的性别 (1.男 2.女): ";
+    int choice; cin >> choice;
+    SetGender(choice == 1 ? "male" : "female");
+    system("cls");
+}
 
-// 修改 1: 增加 Connector& db 参数并正确分发
-void Menu::ShowGuestMenu(ProductService productService, Connector& db)
-{
+// 补齐 ShowAdminMenu 实现
+void Menu::ShowAdminMenu() {
+    cout << "----- 欢迎使用晶东超市管理系统 ------" << endl;
+    cout << "----- 1.查看超市经营情况 ------------" << endl;
+    cout << "----- 2.货物补充 --------------------" << endl;
+    cout << "----- 3.过期货物处理 ----------------" << endl;
+    cout << "----- 0.退出登录 --------------------" << endl;
+}
+
+// --- 顾客主逻辑流程 ---
+
+void Menu::ShowGuestMenu(ProductService productService, Connector& db) {
     while (true) {
         system("cls");
-        std::cout << "----- 欢迎光临晶东超市 (" << this->username << ") ------" << std::endl;
-        std::cout << "----- 1.选购商品 ------------" << std::endl;
-        std::cout << "----- 2.退换商品 ------------" << std::endl;
-        std::cout << "----- 3.我的账户 ------------" << std::endl;
-        std::cout << "----- 0.退出登录 ------------" << std::endl;
-
-        int num;
-        std::cin >> num;
+        cout << "----- 欢迎光临晶东超市 (" << this->username << ") ------" << endl;
+        cout << "1. 选购商品\n2. 退换商品\n3. 我的账户\n0. 退出登录" << endl;
+        int num; cin >> num;
         if (num == 1) {
-            std::vector<Product> products;
+            vector<Product> products;
             productService.GetAllProducts(products);
             ShowShopMenu(products, db);
         }
-        else if (num == 2) {
-            ShowBackMenu(db); // 已修复：传入 db 参数
-        }
-        else if (num == 3) {
-            ShowMyselfMenu(db);
-        }
-        else if (num == 0) {
-            break;
-        }
+        else if (num == 2) ShowBackMenu(db);
+        else if (num == 3) ShowMyselfMenu(db);
+        else if (num == 0) break;
     }
 }
 
-// 修改 2: 实现购买即存入数据库
-void Menu::ShowShopMenu(const std::vector<Product>& products, Connector& db)
-{
+// 1. 选购商品
+void Menu::ShowShopMenu(const vector<Product>& products, Connector& db) {
     system("cls");
-    std::cout << "----- 商品列表 -----" << std::endl;
-    if (products.empty()) {
-        std::cout << "没有可用商品。" << std::endl;
-        system("pause");
-        return;
-    }
+    cout << "----- 商品列表 -----" << endl;
+    if (products.empty()) { cout << "暂无商品。" << endl; system("pause"); return; }
+    for (const auto& product : products) product.Print();
 
-    for (const auto& product : products) {
-        product.Print();
-    }
-
-    std::cout << "\n请输入商品编号购买 (输入0返回)：" << std::endl;
-    int productId;
-    std::cin >> productId;
+    cout << "\n请输入商品编号购买 (0返回): ";
+    int productId; cin >> productId;
     if (productId == 0) return;
 
-    bool found = false;
-    for (const auto& product : products)
-    {
-        if (product.GetId() == productId)
-        {
-            found = true;
-            if (product.GetStock() > 0)
-            {
+    for (const auto& product : products) {
+        if (product.GetId() == productId) {
+            if (product.GetStock() > 0) {
                 try {
-                    // 1. 更新库存 (UPDATE)
-                    string updateSql = "UPDATE products SET stock = stock - 1 WHERE id = " + std::to_string(productId);
-                    db.Execute(updateSql);
-
-                    // 2. 存入购买记录 (INSERT) 到 buy_records 表
-                    string insertSql = "INSERT INTO buy_records(username, product_id, product_name, buy_price) VALUES (?, ?, ?, ?)";
-                    auto pstmt = db.Prepare(insertSql);
+                    db.Execute("UPDATE products SET stock = stock - 1 WHERE id = " + to_string(productId));
+                    auto pstmt = db.Prepare("INSERT INTO buy_records(username, product_id, product_name, buy_price) VALUES (?, ?, ?, ?)");
                     pstmt->setString(1, this->username);
                     pstmt->setInt(2, product.GetId());
                     pstmt->setString(3, product.GetName());
                     pstmt->setDouble(4, product.GetPrice());
-
                     pstmt->executeUpdate();
-                    std::cout << "【购买成功】记录已同步到您的账户。" << std::endl;
+
+                    int earned = static_cast<int>(product.GetPrice());
+                    db.Execute("UPDATE userinfo SET score = score + " + to_string(earned) + " WHERE username = '" + this->username + "'");
+                    cout << "【购买成功】获得积分: " << earned << " 分！" << endl;
                 }
-                catch (sql::SQLException& e) {
-                    std::cerr << "【数据库错误】购买失败: " << e.what() << std::endl;
-                }
+                catch (sql::SQLException& e) { cerr << "数据库异常: " << e.what() << endl; }
             }
-            else {
-                std::cout << "【购买失败】商品 \"" << product.GetName() << "\" 库存为0！" << std::endl;
-            }
+            else cout << "【购买失败】库存不足！" << endl;
             break;
         }
     }
-
-    if (!found) std::cout << "未找到该编号的商品。" << std::endl;
     system("pause");
 }
 
-// 修改 3: 完善退换商品逻辑
-void Menu::ShowBackMenu(Connector& db)
-{
+// 2. 退换商品
+void Menu::ShowBackMenu(Connector& db) {
     system("cls");
-    std::cout << "----- 退换商品中心 (" << this->username << ") -----" << std::endl;
-    std::cout << "按时间倒序排列的购买历史：" << std::endl;
+    cout << "----- 退换商品中心 (" << this->username << ") -----" << endl;
 
-    // 定义临时结构体存储查询结果
-    struct RecordEntry {
-        int recordId;
-        int productId;
-        string productName;
+    struct Entry {
+        int rid;
+        int pid;
+        string name;
+        double price;
     };
-    std::vector<RecordEntry> currentHistory;
+    vector<Entry> history;
 
     try {
-        // 按照购买时间进行排序查询
-        string sql = "SELECT record_id, product_id, product_name, buy_price, buy_time FROM buy_records WHERE username = '" + this->username + "' ORDER BY buy_time DESC";
-        sql::ResultSet* res = db.Query(sql);
-
+        sql::ResultSet* res = db.Query("SELECT record_id, product_id, product_name, buy_price, buy_time FROM buy_records WHERE username = '" + this->username + "' ORDER BY buy_time DESC");
         if (!res || res->rowsCount() == 0) {
-            std::cout << "暂无购买记录，无法办理退换。" << std::endl;
+            cout << "暂无购买记录。" << endl;
             if (res) delete res;
-            system("pause");
-            return;
+            system("pause"); return;
         }
 
-        std::cout << std::left << std::setw(6) << "序号" << std::setw(15) << "商品名称" << std::setw(10) << "金额" << "购买时间" << std::endl;
-        std::cout << "------------------------------------------------------------" << std::endl;
-
-        int index = 1;
+        cout << left << setw(6) << "序号" << setw(20) << "名称" << "金额" << endl;
+        int idx = 1;
         while (res->next()) {
-            std::cout << std::left << std::setw(6) << index
-                << std::setw(15) << res->getString("product_name")
-                << std::setw(10) << res->getDouble("buy_price")
-                << res->getString("buy_time") << std::endl;
+            cout << left << setw(6) << idx << setw(20) << res->getString("product_name") << res->getDouble("buy_price") << endl;
+            double currentPrice = static_cast<double>(res->getDouble("buy_price"));
 
-            // 将关键信息存入内存列表
-            currentHistory.push_back({ res->getInt("record_id"), res->getInt("product_id"), res->getString("product_name") });
-            index++;
+            history.push_back({
+                res->getInt("record_id"),
+                res->getInt("product_id"),
+                res->getString("product_name"),
+                currentPrice
+                });
+            idx++;
         }
         delete res;
 
-        std::cout << "\n请输入要退换商品的【序号】(输入0返回): ";
-        int choice;
-        std::cin >> choice;
-
-        if (choice > 0 && choice < index) {
-            RecordEntry selected = currentHistory[choice - 1];
-
-            // 1. 恢复商品库存
-            string restoreSql = "UPDATE products SET stock = stock + 1 WHERE id = " + std::to_string(selected.productId);
-            db.Execute(restoreSql);
-
-            // 2. 从记录表中删除该次购买记录
-            string deleteSql = "DELETE FROM buy_records WHERE record_id = " + std::to_string(selected.recordId);
-            db.Execute(deleteSql);
-
-            std::cout << "【退换成功】商品 \"" << selected.productName << "\" 已成功退货，库存已返还。" << std::endl;
+        cout << "\n请输入退换序号 (0返回): ";
+        int choice; cin >> choice;
+        if (choice > 0 && choice < idx) {
+            Entry s = history[choice - 1];
+            db.Execute("UPDATE products SET stock = stock + 1 WHERE id = " + to_string(s.pid));
+            db.Execute("UPDATE userinfo SET score = score - " + to_string(static_cast<int>(s.price)) + " WHERE username = '" + this->username + "'");
+            db.Execute("DELETE FROM buy_records WHERE record_id = " + to_string(s.rid));
+            cout << "【退换成功】对应积分已扣除。" << endl;
         }
     }
-    catch (sql::SQLException& e) {
-        std::cout << "退换操作失败: " << e.what() << std::endl;
-    }
+    catch (...) { cout << "操作失败。" << endl; }
     system("pause");
 }
 
-// 修改 4: 实现账户记录查询
-void Menu::ShowMyselfMenu(Connector& db)
-{
-    system("cls");
-    std::cout << "----- 我的账户 (" << this->username << ") -----" << std::endl;
-    std::cout << "----- 1.购买记录 ------------" << std::endl;
-    std::cout << "----- 2.我的积分 ------------" << std::endl;
-    std::cout << "----- 3.积分商场 ------------" << std::endl;
-    std::cout << "----- 0.返回上一级 ----------" << std::endl;
-
-    int choice;
-    std::cin >> choice;
-
-    if (choice == 1) {
-        std::cout << "\n正在加载您的历史记录..." << std::endl;
+// 3. 我的账户：积分商城逻辑
+void Menu::ShowMyselfMenu(Connector& db) {
+    while (true) {
+        system("cls");
+        int currentScore = 0;
         try {
-            string sql = "SELECT product_name, buy_price, buy_time FROM buy_records WHERE username = '" + this->username + "' ORDER BY buy_time DESC";
-            sql::ResultSet* res = db.Query(sql);
-
-            if (!res || res->rowsCount() == 0) {
-                std::cout << "您目前还没有任何购买记录。" << std::endl;
-            }
-            else {
-                std::cout << std::left << std::setw(15) << "商品名称" << std::setw(10) << "价格" << "购买时间" << std::endl;
-                std::cout << "--------------------------------------------------------" << std::endl;
-                while (res->next()) {
-                    std::cout << std::left << std::setw(15) << res->getString("product_name")
-                        << std::setw(10) << res->getDouble("buy_price")
-                        << res->getString("buy_time") << std::endl;
-                }
-            }
+            sql::ResultSet* res = db.Query("SELECT score FROM userinfo WHERE username = '" + this->username + "'");
+            if (res && res->next()) currentScore = res->getInt("score");
             delete res;
         }
-        catch (sql::SQLException& e) {
-            std::cout << "查询记录失败: " << e.what() << std::endl;
+        catch (...) {}
+
+        cout << "----- 我的账户 (" << this->username << ") -----" << endl;
+        cout << "当前可用积分: " << currentScore << " 分" << endl;
+        cout << "1. 购买记录\n2. 积分商城\n0. 返回上一级" << endl;
+
+        int choice; cin >> choice;
+        if (choice == 0) break;
+
+        if (choice == 1) {
+            system("cls");
+            cout << "--- 购买历史 ---" << endl;
+            sql::ResultSet* res = db.Query("SELECT product_name, buy_price, buy_time FROM buy_records WHERE username = '" + this->username + "' ORDER BY buy_time DESC");
+            while (res && res->next()) cout << res->getString("product_name") << "\t" << res->getDouble("buy_price") << "\t" << res->getString("buy_time") << endl;
+            delete res; system("pause");
         }
-        system("pause");
+        else if (choice == 2) {
+            system("cls");
+            cout << "======== 晶东数码积分商城 (当前积分: " << currentScore << ") ========" << endl;
+            try {
+                sql::ResultSet* res = db.Query("SELECT * FROM points_products WHERE stock > 0");
+                cout << left << setw(6) << "ID" << setw(25) << "礼品名称" << "所需积分" << endl;
+                while (res && res->next()) {
+                    cout << left << setw(6) << res->getInt("id") << setw(25) << res->getString("name") << res->getInt("required_points") << " 分" << endl;
+                }
+                delete res;
+
+                cout << "\n请输入兑换ID (0返回): ";
+                int gid; cin >> gid;
+                if (gid == 0) continue;
+
+                sql::ResultSet* ck = db.Query("SELECT * FROM points_products WHERE id = " + to_string(gid));
+                if (ck && ck->next()) {
+                    int cost = ck->getInt("required_points");
+                    if (currentScore >= cost) {
+                        db.Execute("UPDATE userinfo SET score = score - " + to_string(cost) + " WHERE username = '" + this->username + "'");
+                        db.Execute("UPDATE points_products SET stock = stock - 1 WHERE id = " + to_string(gid));
+                        cout << "【兑换成功】数码礼品已发放！" << endl;
+                    }
+                    else cout << "【兑换失败】积分不足！" << endl;
+                }
+                delete ck;
+            }
+            catch (...) { cout << "商城加载异常。" << endl; }
+            system("pause");
+        }
     }
 }
